@@ -11,6 +11,8 @@ from transformers import RobertaTokenizer
 
 logger = logging.getLogger(__name__)
 
+# defines names and URLs for the vocab and merges files, and the sizes of positional 
+# embeddings for different pretrained models
 VOCAB_FILES_NAMES = {
     "vocab_file": "vocab.json",
     "merges_file": "merges.txt",
@@ -36,15 +38,16 @@ PRETRAINED_VOCAB_FILES_MAP = {
 }
 
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
-    "roberta-base": 512,
-    "roberta-large": 512,
-    "roberta-large-mnli": 512,
-    "distilroberta-base": 512,
-    "roberta-base-openai-detector": 512,
-    "roberta-large-openai-detector": 512,
+    "roberta-base": 1024,
+    "roberta-large": 1024,
+    "roberta-large-mnli": 1024,
+    "distilroberta-base": 1024,
+    "roberta-base-openai-detector": 1024,
+    "roberta-large-openai-detector": 1024,
 }
+    # changed the numbers from 512 to 1024 (for better fitting with gpt2)
 
-
+# Bytes to Unicode Mappings: 
 @lru_cache()
 def bytes_to_unicode():
     """
@@ -69,7 +72,9 @@ def bytes_to_unicode():
     cs = [chr(n) for n in cs]
     return dict(zip(bs, cs))
 
+    # maps UTF-8 bytes to Unicode strings to avoid control characters and ensure proper BPE(byte-pair encoding) operations
 
+# Symbol Pair Extraction
 def get_pairs(word):
     """
     Return set of symbol pairs in a word.
@@ -83,7 +88,9 @@ def get_pairs(word):
         prev_char = char
     return pairs
 
+    # returns a set fo symbol pairs in a word, which is used for the BPE merge operations
 
+# Tokenizaer Class Definition:
 class PolymerSmilesTokenizer(PreTrainedTokenizer):
     """Adapt Roberta Tokenizer to PolymerSmilesTokenzier"""
 
@@ -169,6 +176,7 @@ class PolymerSmilesTokenizer(PreTrainedTokenizer):
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
     model_input_names = ["input_ids", "attention_mask"]
 
+    # initialization
     def __init__(
         self,
         vocab_file,
@@ -273,7 +281,7 @@ class PolymerSmilesTokenizer(PreTrainedTokenizer):
         word = " ".join(word)
         self.cache[token] = word
         return word
-
+    # Tokenization and Encoding Methods
     def _tokenize(self, text):
         """Tokenize a string."""
         bpe_tokens = []

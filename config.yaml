@@ -1,7 +1,7 @@
 file_path: 'data/pretrain.csv'          # pretrain data path
 
 epochs: 30                              # total number of epochs
-batch_size: 100                         # batch size
+batch_size: 1                         # batch size
 lr_rate: 0.00005                        # learning rate
 scheduler_type: 'linear'                # scheduler type
 weight_decay: 0.0                       # weight decay for AdamW
@@ -13,7 +13,7 @@ fp16: True                              # float precision 16 (i.e. True/False)
 logging_strategy: 'epoch'               # logging frequency
 evaluation_strategy: 'epoch'            # validation frequency
 report_to: 'tensorboard'                # integrations to report the results and logs to
-dataloader_num_workers: 18              # Number of subprocesses to use for data loading
+dataloader_num_workers: 0              # Number of subprocesses to use for data loading
 sharded_ddp: False                   # option of Sharded DDP training
 save_path: 'ckpt/pretrain.pt'           # logging and save path of the pretrained model
 load_checkpoint: False

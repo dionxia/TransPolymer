@@ -10,6 +10,11 @@ from tensorboard import program
 import sys
 import os
 import yaml
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, Trainer, TrainingArguments
+from torch.utils.data import Dataset, DataLoader
+import torch
+import pandas as pd
+
 
 """Import PolymerSmilesTokenizer from PolymerSmilesTokenization.py"""
 from PolymerSmilesTokenization import PolymerSmilesTokenizer
@@ -44,7 +49,7 @@ def main(pretrain_config):
     tokenizer = PolymerSmilesTokenizer.from_pretrained("roberta-base", max_len=pretrain_config['blocksize'])
 
     """Construct MLM model"""
-    model = RobertaForMaskedLM(config=config).to(device)
+    model = model = GPT2LMHeadModel.from_pretrained('gpt2').to(device)
 
     """Load Data"""
     train_data, valid_data = split(pretrain_config['file_path'])
